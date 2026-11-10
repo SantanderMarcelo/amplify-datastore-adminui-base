@@ -105,6 +105,21 @@ function App() {
     }
   };
 
+  // 6. Tarea pesada en el hilo principal (genera Long Tasks para Browser Profiling)
+  const calcularRutaAmbulancia = () => {
+    setError(null);
+    if (rum()) rum().addAction('calcular_ruta_ambulancia');
+    const inicio = performance.now();
+    let rutas = 0;
+    // Bloquea el hilo principal ~1,5 s a propósito
+    while (performance.now() - inicio < 1500) {
+      for (let i = 0; i < 10000; i++) {
+        rutas += Math.sqrt(i) * Math.random();
+      }
+    }
+    setMensaje(`Ruta óptima calculada (${Math.round(rutas) % 100} km) en ${Math.round(performance.now() - inicio)} ms.`);
+  };
+
   // 5. Provocar error JavaScript no controlado
   const errorJS = () => {
     const paciente = null;
@@ -167,6 +182,7 @@ function App() {
           <div style={styles.row}>
             <button style={styles.btnSec} onClick={consultarMedicos}>Ver médicos disponibles</button>
             <button style={styles.btnSec} onClick={apiLenta}>Consultar historial (lento)</button>
+            <button style={styles.btnSec} onClick={calcularRutaAmbulancia}>Calcular ruta ambulancia (tarea pesada)</button>
             <button style={styles.btnWarn} onClick={error500}>Despachar ambulancia (falla 500)</button>
             <button style={styles.btnWarn} onClick={errorJS}>Provocar error JS</button>
           </div>

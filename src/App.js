@@ -172,4 +172,21 @@ function App() {
           </div>
 
           {mensaje && <div style={styles.ok}>{mensaje}</div>}
-          {error && <div
+          {error && <div style={styles.err}>{error}</div>}
+
+          {medicos.length > 0 && (
+            <ul style={styles.list}>
+              {medicos.map((m) => (
+                <li key={m.id}>Dr(a). {m.name} · {m.address.city}</li>
+              ))}
+            </ul>
+          )}
+        </section>
+      </main>
+
+      <footer style={styles.footer}>Demo FYAGS · Datos de prueba, no corresponden a pacientes reales</footer>
+    </div>
+  );
+}
+
+export default App;

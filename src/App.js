@@ -1,11 +1,21 @@
 import React, { useState } from 'react';
 
-// Demo Venemergencia - App React para mostrar Datadog RUM
+// Demo Venemergencia - App React desplegada en AWS Amplify y monitoreada con Datadog RUM
 // No requiere backend ni dependencias nuevas.
 // Usa APIs públicas de prueba para generar recursos, latencias y errores.
 
 const API = 'https://jsonplaceholder.typicode.com';
 const HTTPBIN = 'https://httpbin.org';
+
+// Versiones del stack (Node y Yarn confirmadas en el log de build de Amplify)
+const STACK = {
+  framework: `React ${React.version} (Create React App)`,
+  runtime: 'Node.js v16.20.2',
+  packageManager: 'Yarn 1.22.22',
+  hosting: 'AWS Amplify Hosting (CloudFront)',
+  region: 'us-east-2',
+  monitoring: 'Datadog RUM (Browser SDK v7)',
+};
 
 const rum = () => (typeof window !== 'undefined' ? window.DD_RUM : undefined);
 
@@ -13,7 +23,9 @@ const styles = {
   page: { fontFamily: 'Arial, sans-serif', background: '#f4f6f9', minHeight: '100vh', margin: 0 },
   header: { background: '#c8102e', color: '#fff', padding: '20px 32px' },
   title: { margin: 0, fontSize: 26 },
-  subtitle: { margin: '4px 0 0', opacity: 0.9 },
+  subtitle: { margin: '6px 0 0', opacity: 0.9, fontSize: 14 },
+  badges: { display: 'flex', flexWrap: 'wrap', gap: 8, marginTop: 12 },
+  badge: { background: 'rgba(255,255,255,0.18)', border: '1px solid rgba(255,255,255,0.4)', borderRadius: 12, padding: '4px 10px', fontSize: 12 },
   main: { maxWidth: 960, margin: '24px auto', padding: '0 16px', display: 'grid', gap: 20 },
   card: { background: '#fff', borderRadius: 8, padding: 24, boxShadow: '0 1px 4px rgba(0,0,0,0.1)' },
   h2: { marginTop: 0, color: '#c8102e' },
@@ -103,8 +115,16 @@ function App() {
   return (
     <div style={styles.page}>
       <header style={styles.header}>
-        <h1 style={styles.title}>Venemergencia</h1>
-        <p style={styles.subtitle}>Demo de solicitud de atención · Monitoreada con Datadog RUM</p>
+        <h1 style={styles.title}>Venemergencia · App desarrollada con AWS Amplify</h1>
+        <p style={styles.subtitle}>Demo de solicitud de atención monitoreada end-to-end con Datadog</p>
+        <div style={styles.badges}>
+          <span style={styles.badge}>Framework: {STACK.framework}</span>
+          <span style={styles.badge}>Runtime de build: {STACK.runtime}</span>
+          <span style={styles.badge}>Package manager: {STACK.packageManager}</span>
+          <span style={styles.badge}>Hosting: {STACK.hosting}</span>
+          <span style={styles.badge}>Región: {STACK.region}</span>
+          <span style={styles.badge}>Observabilidad: {STACK.monitoring}</span>
+        </div>
       </header>
 
       <main style={styles.main}>
@@ -152,21 +172,4 @@ function App() {
           </div>
 
           {mensaje && <div style={styles.ok}>{mensaje}</div>}
-          {error && <div style={styles.err}>{error}</div>}
-
-          {medicos.length > 0 && (
-            <ul style={styles.list}>
-              {medicos.map((m) => (
-                <li key={m.id}>Dr(a). {m.name} · {m.address.city}</li>
-              ))}
-            </ul>
-          )}
-        </section>
-      </main>
-
-      <footer style={styles.footer}>Demo FYAGS · Datos de prueba, no corresponden a pacientes reales</footer>
-    </div>
-  );
-}
-
-export default App;
+          {error && <div
